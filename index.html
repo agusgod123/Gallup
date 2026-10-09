@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#821F21">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Survei Keterlibatan Pegawai BP Besakih</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+  :root {
+    --maroon: #821F21;
+    --maroon-tua: #621719;
+    --maroon-muda: #FBF1F1;
+    --merah: #ED1B24;
+    --tinta: #292929;
+    --batu: #5F5854;
+    --garis: #E4DEDB;
+    --tepi: #BDB4B0;
+    --jejak: #F0E3E3;
+    --perhatian: #8A5A00;
+    --perhatian-latar: #FFF4DA;
+    --huruf: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color-scheme: light;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body { margin: 0; background: #fff; color: var(--tinta); font: 18px/1.5 var(--huruf); -webkit-font-smoothing: antialiased; }
+
+  /* Kepala + lengkung merah (lengkung = penanda kemajuan) */
+  .kepala { background: var(--maroon); color: #fff; padding: calc(env(safe-area-inset-top, 0px) + 14px) 20px 14px; }
+  .kepala p { max-width: 34rem; margin: 0 auto; font-size: 14px; line-height: 1.35; text-wrap: balance; }
+  .jalur { max-width: 34rem; margin: 0 auto; padding: 16px 20px 0; }
+  .lengkung { display: block; width: 100%; height: auto; overflow: visible; }
+  .lengkung path { fill: none; stroke-width: 3.5; stroke-linecap: round; }
+  .lengkung .jejak { stroke: var(--jejak); }
+  .lengkung .isi { stroke: var(--merah); stroke-dasharray: 100 100; stroke-dashoffset: 100; transition: stroke-dashoffset .7s cubic-bezier(.3, .7, .2, 1); }
+
+  main { max-width: 34rem; margin: 0 auto; padding: 6px 20px calc(env(safe-area-inset-bottom, 0px) + 48px); }
+  h1 { font-size: 32px; line-height: 1.12; letter-spacing: -0.01em; margin: 18px 0 14px; text-wrap: balance; }
+  h2 { font-size: 24px; line-height: 1.2; margin: 6px 0 6px; }
+  h1:focus, h2:focus, fieldset:focus, .status:focus { outline: none; }
+  p { margin: 0 0 14px; }
+  .status { margin-top: 24px; color: var(--batu); }
+  .langkah { font-size: 14px; color: var(--batu); margin: 10px 0 2px; }
+  .bantuan { font-size: 16px; color: var(--batu); }
+  .rincian { font-size: 14px; color: var(--batu); overflow-wrap: anywhere; }
+  .akhir { margin-top: 22px; }
+
+  /* Halaman depan */
+  .fakta { margin: 22px 0; display: grid; gap: 14px; }
+  .fakta dt { font-weight: 700; }
+  .fakta dd { margin: 2px 0 0; color: var(--batu); font-size: 16px; }
+  .catatan { border-left: 3px solid var(--maroon); padding: 2px 0 2px 14px; font-size: 16px; }
+  .kolom { margin: 24px 0 0; }
+  .kolom label { display: block; font-weight: 700; }
+  .kolom .bantuan { margin: 2px 0 8px; }
+  .kode { width: 100%; font: 700 26px/1.2 var(--huruf); letter-spacing: .16em; text-transform: uppercase; padding: 12px 14px; color: var(--tinta); background: #fff; border: 2px solid var(--tepi); border-radius: 10px; }
+  .kode:focus { outline: none; border-color: var(--maroon); box-shadow: 0 0 0 3px rgba(237, 27, 36, .25); }
+  .kolom + .bantuan { margin-top: 14px; }
+  .galat { color: var(--perhatian); font-weight: 700; font-size: 16px; margin: 8px 0 0; }
+  .galat:empty { display: none; }
+
+  /* Tombol */
+  .aksi { display: flex; gap: 12px; margin-top: 28px; }
+  .aksi.tumpuk { flex-direction: column; }
+  .tombol { -webkit-appearance: none; appearance: none; display: inline-flex; align-items: center; justify-content: center; min-height: 54px; padding: 0 22px; border-radius: 12px; border: 2px solid transparent; font: 700 18px/1 var(--huruf); cursor: pointer; touch-action: manipulation; }
+  .utama { flex: 1; background: var(--maroon); color: #fff; }
+  .utama:hover { background: var(--maroon-tua); }
+  .kedua { background: #fff; color: var(--maroon); border-color: var(--maroon); }
+  .tombol:focus-visible { outline: 3px solid var(--merah); outline-offset: 3px; }
+  .tombol:disabled { opacity: .65; cursor: progress; }
+
+  /* Pernyataan & skala */
+  .butir { margin: 0; padding: 22px 0 20px; border: 0; border-top: 1px solid var(--garis); min-width: 0; }
+  .butir:first-of-type { border-top: 0; }
+  .butir legend { float: left; width: 100%; display: flex; gap: .45em; padding: 0; margin: 0 0 14px; font-size: 19px; line-height: 1.45; }
+  .butir legend + * { clear: left; }
+  .no { flex: none; min-width: 1.35em; font-weight: 700; color: var(--maroon); }
+  .skala { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+  .skala label { position: relative; display: block; }
+  .skala input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+  .opsi { display: flex; flex-direction: column; align-items: center; gap: 5px; height: 100%; min-height: 78px; padding: 10px 2px 8px; border: 1.5px solid var(--tepi); border-radius: 10px; background: #fff; text-align: center; transition: background-color .15s, border-color .15s; }
+  .opsi b { font-size: 20px; line-height: 1; }
+  .opsi small { font-size: 12px; line-height: 1.2; color: var(--batu); }
+  .skala input:checked + .opsi { background: var(--maroon); border-color: var(--maroon); color: #fff; }
+  .skala input:checked + .opsi small { color: #fff; }
+  .skala input:focus-visible + .opsi { outline: 3px solid var(--merah); outline-offset: 2px; }
+  .pesan-belum { display: none; margin: 10px 0 0; color: var(--perhatian); font-size: 15px; font-weight: 700; }
+
+  /* Pilihan unit & masa kerja */
+  .grup { margin: 18px 0 0; padding: 0; border: 0; min-width: 0; }
+  .grup legend { float: left; width: 100%; padding: 0; margin: 0 0 10px; font-weight: 700; font-size: 19px; }
+  .grup legend + * { clear: left; }
+  .pilihan { display: flex; align-items: center; gap: 12px; min-height: 54px; padding: 12px 14px; margin: 0 0 8px; border: 1.5px solid var(--tepi); border-radius: 10px; background: #fff; cursor: pointer; }
+  .pilihan input { flex: none; width: 22px; height: 22px; margin: 0; accent-color: var(--maroon); }
+  .pilihan:has(input:checked) { border-color: var(--maroon); background: var(--maroon-muda); }
+  .pilihan:has(input:focus-visible) { outline: 3px solid var(--merah); outline-offset: 2px; }
+
+  /* Pertanyaan terbuka */
+  .terbuka { margin: 22px 0 0; }
+  .terbuka label { display: block; font-weight: 700; margin-bottom: 8px; }
+  textarea { display: block; width: 100%; min-height: 132px; padding: 12px 14px; font: 18px/1.5 var(--huruf); color: var(--tinta); border: 1.5px solid var(--tepi); border-radius: 10px; resize: vertical; }
+  textarea:focus { outline: none; border-color: var(--maroon); box-shadow: 0 0 0 3px rgba(237, 27, 36, .25); }
+  .hitung { font-size: 13px; color: var(--batu); text-align: right; margin: 4px 0 0; }
+
+  /* Tanda belum dijawab: ditaruh terakhir dan lebih spesifik supaya tidak tertimpa .butir/.grup */
+  fieldset.belum { background: var(--perhatian-latar); border-radius: 10px; margin-left: -12px; margin-right: -12px; padding-left: 12px; padding-right: 12px; }
+  fieldset.belum .pesan-belum { display: block; }
+  .butir.belum + .butir { border-top-color: transparent; }
+  .butir.belum + .butir.belum { margin-top: 8px; }
+  .grup.belum { padding-top: 12px; padding-bottom: 4px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lengkung .isi, .opsi { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <header class="kepala">
+    <p>Badan Pengelola Fasilitas Kawasan Suci Pura Agung Besakih</p>
+  </header>
+  <div class="jalur" aria-hidden="true">
+    <svg class="lengkung" viewBox="0 0 340 30" focusable="false">
+      <path class="jejak" d="M3 19C58 5 112 5 170 17S282 31 337 10" pathLength="100"/>
+      <path class="isi" id="isi-lengkung" d="M3 19C58 5 112 5 170 17S282 31 337 10" pathLength="100"/>
+    </svg>
+  </div>
+  <main id="app"></main>
+  <noscript><p style="padding:0 20px">Aktifkan JavaScript untuk mengisi survei ini.</p></noscript>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ==== GANTI dengan URL web app Apps Script (Deploy > Manage deployments, berakhiran /exec) ==== */
+  const API_URL = 'https://script.google.com/macros/s/GANTI_DENGAN_ID_DEPLOYMENT/exec';
+
+  const KUNCI_DRAF = 'survei-bp-besakih:draf';
+  const PER_HALAMAN = 5;
+  const BATAS_TEKS = 1000;
+  const UMUR_DRAF_MS = 12 * 60 * 60 * 1000; // draf di perangkat bersama kedaluwarsa setelah 12 jam
+  const SKALA_BAWAAN = ['Sangat tidak setuju', 'Tidak setuju', 'Netral', 'Setuju', 'Sangat setuju'];
+
+  const app = document.getElementById('app');
+  const isiLengkung = document.getElementById('isi-lengkung');
+
+  let cfg = null;
+  let halaman = [];
+  let langkah = [];
+  let nomor = {};
+  let draf = null;
+  let layar = 'muat';
+  let pesan = '';
+  let rincian = '';
+  let jenisGalat = '';
+
+  /* ---------- utilitas ---------- */
+  const PETA_ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => PETA_ESC[c]);
+  const normalKode = (s) => String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12);
+  const tunggu = (ms) => new Promise((r) => setTimeout(r, ms));
+  const gerakBoleh = () => !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  function buatId() {
+    if (window.crypto && typeof window.crypto.randomUUID === 'function') return 'k-' + window.crypto.randomUUID();
+    return 'k-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12);
+  }
+
+  function potong(arr, n) {
+    const hasil = [];
+    for (let i = 0; i < arr.length; i += n) hasil.push(arr.slice(i, i + n));
+    return hasil;
+  }
+
+  function kodeDariUrl() {
+    try { return normalKode(new URLSearchParams(window.location.search).get('kode')); } catch (e) { return ''; }
+  }
+
+  /* ---------- draf di perangkat ---------- */
+  function drafBaru(kode) {
+    return { kode: kode, unit: '', masaKerja: '', jawaban: {}, terbuka: {}, posisi: 0, mulai: Date.now(), idKirim: buatId() };
+  }
+  function simpanDraf() { try { if (draf) localStorage.setItem(KUNCI_DRAF, JSON.stringify(draf)); } catch (e) { /* penyimpanan diblokir */ } }
+  function bacaDraf() { try { const t = localStorage.getItem(KUNCI_DRAF); return t ? JSON.parse(t) : null; } catch (e) { return null; } }
+  function hapusDraf() { try { localStorage.removeItem(KUNCI_DRAF); } catch (e) { /* abaikan */ } }
+
+  /* ---------- server ---------- */
+  // Body dikirim sebagai teks biasa supaya browser tidak mengirim preflight CORS ke Apps Script.
+  function panggil(payload, batasMs) {
+    const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+    const timer = ctrl ? setTimeout(() => ctrl.abort(), batasMs) : null;
+    const opsi = payload ? { method: 'POST', body: JSON.stringify(payload) } : { method: 'GET', cache: 'no-store' };
+    if (ctrl) opsi.signal = ctrl.signal;
+    const url = payload ? API_URL : API_URL + (API_URL.indexOf('?') < 0 ? '?' : '&') + 'action=config';
+    return fetch(url, opsi)
+      .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .finally(() => { if (timer) clearTimeout(timer); });
+  }
+
+  /* ---------- tampilan ---------- */
+  function tampil(nama) {
+    layar = nama;
+    const pembuat = {
+      muat: layarMuat, 'galat-muat': layarGalatMuat, tutup: layarTutup, lanjut: layarLanjut,
+      intro: layarIntro, isi: layarIsi, kirim: layarKirim, gagal: layarGagal, selesai: layarSelesai
+    }[nama];
+    app.innerHTML = pembuat();
+    aturLengkung();
+    window.scrollTo(0, 0);
+    const fokus = app.querySelector('[data-fokus]');
+    if (fokus) fokus.focus({ preventScroll: true });
+  }
+
+  function aturLengkung() {
+    const total = Math.max(langkah.length, 1) + 1;
+    let f = 0;
+    if (layar === 'isi' && draf) f = draf.posisi / total;
+    else if (layar === 'kirim' || layar === 'gagal') f = (total - 1) / total;
+    else if (layar === 'selesai') f = 1;
+    isiLengkung.style.strokeDashoffset = String(100 - f * 100);
+    isiLengkung.style.opacity = f > 0 ? '1' : '0';
+  }
+
+  function layarMuat() {
+    return '<p class="status" data-fokus tabindex="-1">Memuat survei…</p>';
+  }
+
+  function layarGalatMuat() {
+    return `
+      <h1 data-fokus tabindex="-1">Survei belum bisa dibuka</h1>
+      <p>${esc(pesan)}</p>
+      ${rincian ? `<p class="rincian">Keterangan untuk admin: ${esc(rincian)}</p>` : ''}
+      <div class="aksi"><button type="button" class="tombol utama" data-aksi="muat-ulang">Muat ulang</button></div>`;
+  }
+
+  function layarTutup() {
+    return `
+      <h1 data-fokus tabindex="-1">Survei sudah ditutup</h1>
+      <p>Periode pengisian sudah berakhir. Terima kasih atas perhatian Anda.</p>`;
+  }
+
+  function layarLanjut() {
+    const terjawab = Object.keys(draf.jawaban).length;
+    return `
+      <h1 data-fokus tabindex="-1">Lanjutkan isian?</h1>
+      <p>Ada isian yang belum dikirim di perangkat ini: ${terjawab} dari ${cfg.butir.length} pernyataan sudah dijawab.</p>
+      <p class="bantuan">Kalau ini isian orang lain, pilih Mulai dari awal. Isian lama akan dihapus.</p>
+      <div class="aksi tumpuk">
+        <button type="button" class="tombol utama" data-aksi="lanjutkan">Lanjutkan isian</button>
+        <button type="button" class="tombol kedua" data-aksi="buang-draf">Mulai dari awal</button>
+      </div>`;
+  }
+
+  function layarIntro() {
+    const n = cfg.butir.length;
+    const menit = Math.max(5, Math.round((n * 15) / 60));
+    return `
+      <h1 data-fokus tabindex="-1">${esc(cfg.judul)}</h1>
+      ${cfg.pengantar ? `<p>${esc(cfg.pengantar)}</p>` : ''}
+      <dl class="fakta">
+        <div><dt>Anonim</dt><dd>Tidak ada nama, NIP, atau email yang dicatat. Hasil hanya dilaporkan per kelompok minimal ${esc(cfg.minKelompok)} orang.</dd></div>
+        <div><dt>Sekitar ${menit} menit</dt><dd>${n} pernyataan dalam ${langkah.length} bagian. Jawaban tersimpan di perangkat ini sampai terkirim.</dd></div>
+        <div><dt>Jawab apa adanya</dt><dd>Tidak ada jawaban benar atau salah.</dd></div>
+      </dl>
+      ${cfg.catatan ? `<p class="catatan">${esc(cfg.catatan)}</p>` : ''}
+      ${cfg.wajibKode ? `
+        <div class="kolom">
+          <label for="kode">Kode akses</label>
+          <p class="bantuan" id="bantuan-kode">Tertulis di slip yang Anda terima.</p>
+          <input class="kode" id="kode" value="${esc(kodeDariUrl())}" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" maxlength="12" enterkeyhint="go" aria-describedby="bantuan-kode galat-kode">
+          <p class="galat" id="galat-kode" role="alert"></p>
+        </div>` : ''}
+      <div class="aksi"><button type="button" class="tombol utama" data-aksi="mulai">Mulai isi survei</button></div>`;
+  }
+
+  function layarIsi() {
+    const nama = langkah[draf.posisi];
+    const terakhir = draf.posisi === langkah.length - 1;
+    let isi;
+    if (nama === 'profil') isi = bagianProfil();
+    else if (nama === 'terbuka') isi = bagianTerbuka();
+    else isi = bagianButir(Number(nama.slice(4)));
+    return `
+      <p class="langkah">Bagian ${draf.posisi + 1} dari ${langkah.length}</p>
+      ${isi}
+      <p class="galat" id="galat-langkah" role="alert"></p>
+      ${terakhir ? '<p class="bantuan akhir">Setelah dikirim, jawaban tidak bisa diubah.</p>' : ''}
+      <div class="aksi">
+        ${draf.posisi > 0 ? '<button type="button" class="tombol kedua" data-aksi="kembali">Kembali</button>' : ''}
+        ${terakhir
+          ? '<button type="button" class="tombol utama" data-aksi="kirim">Kirim jawaban</button>'
+          : '<button type="button" class="tombol utama" data-aksi="lanjut">Lanjut</button>'}
+      </div>`;
+  }
+
+  function bagianProfil() {
+    return `
+      <h2 data-fokus tabindex="-1">Tentang Anda</h2>
+      <p class="bantuan">Hanya untuk mengelompokkan hasil.</p>
+      ${cfg.unitKerja.length ? grupPilihan('unit', 'Unit kerja', cfg.unitKerja, draf.unit) : ''}
+      ${cfg.masaKerja.length ? grupPilihan('masaKerja', 'Masa kerja', cfg.masaKerja, draf.masaKerja) : ''}`;
+  }
+
+  function grupPilihan(nama, judul, opsi, nilai) {
+    return `
+      <fieldset class="grup" id="grup-${nama}" tabindex="-1">
+        <legend>${esc(judul)}</legend>
+        <div>
+          ${opsi.map((o) => `<label class="pilihan"><input type="radio" name="${nama}" value="${esc(o)}"${o === nilai ? ' checked' : ''}><span>${esc(o)}</span></label>`).join('')}
+        </div>
+        <p class="pesan-belum">Pilih salah satu.</p>
+      </fieldset>`;
+  }
+
+  function bagianButir(i) {
+    const daftar = halaman[i];
+    const dari = nomor[daftar[0].kode];
+    const sampai = nomor[daftar[daftar.length - 1].kode];
+    return `
+      <h2 data-fokus tabindex="-1">Pernyataan ${dari}–${sampai}</h2>
+      <p class="bantuan">Seberapa setuju Anda dengan setiap pernyataan?</p>
+      ${daftar.map((b) => kartuButir(b)).join('')}`;
+  }
+
+  function kartuButir(b) {
+    const nilai = draf.jawaban[b.kode];
+    const opsi = cfg.skala.map((label, j) => {
+      const v = j + 1;
+      return `<label><input type="radio" name="${esc(b.kode)}" value="${v}"${nilai === v ? ' checked' : ''}><span class="opsi"><b>${v}</b><small>${esc(label)}</small></span></label>`;
+    }).join('');
+    return `
+      <fieldset class="butir" id="b-${esc(b.kode)}" tabindex="-1">
+        <legend><span class="no">${nomor[b.kode]}</span><span>${esc(b.teks)}</span></legend>
+        <div class="skala">${opsi}</div>
+        <p class="pesan-belum">Belum dijawab.</p>
+      </fieldset>`;
+  }
+
+  function bagianTerbuka() {
+    const kolom = cfg.terbuka.map((t, i) => {
+      const isi = draf.terbuka[t.kode] || '';
+      return `
+        <div class="terbuka">
+          <label for="terbuka-${i}">${esc(t.teks)}</label>
+          <textarea id="terbuka-${i}" data-terbuka="${esc(t.kode)}" maxlength="${BATAS_TEKS}" rows="4">${esc(isi)}</textarea>
+          <p class="hitung" data-hitung-untuk="terbuka-${i}">${isi.length}/${BATAS_TEKS}</p>
+        </div>`;
+    }).join('');
+    return `
+      <h2 data-fokus tabindex="-1">Masukan Anda</h2>
+      <p class="bantuan">Boleh dikosongkan. Sebaiknya tidak menyebut nama orang.</p>
+      ${kolom}`;
+  }
+
+  function layarKirim() {
+    return `
+      <h1 data-fokus tabindex="-1">Mengirim jawaban…</h1>
+      <p class="bantuan" id="status-kirim" role="status">Tunggu sebentar, jangan tutup halaman ini.</p>`;
+  }
+
+  function layarGagal() {
+    const perluKode = jenisGalat === 'kode';
+    const muatUlang = jenisGalat === 'validasi';
+    return `
+      <h1 data-fokus tabindex="-1">Jawaban belum terkirim</h1>
+      <p>${esc(pesan)}</p>
+      ${perluKode ? `
+        <div class="kolom">
+          <label for="kode">Kode akses dari slip lain</label>
+          <input class="kode" id="kode" value="" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" maxlength="12" enterkeyhint="send">
+        </div>` : ''}
+      <p class="bantuan">Jawaban Anda masih tersimpan di perangkat ini.</p>
+      <div class="aksi tumpuk">
+        ${muatUlang
+          ? '<button type="button" class="tombol utama" data-aksi="muat-ulang">Muat ulang</button>'
+          : '<button type="button" class="tombol utama" data-aksi="kirim">Coba kirim lagi</button>'}
+        <button type="button" class="tombol kedua" data-aksi="periksa">Periksa jawaban</button>
+      </div>`;
+  }
+
+  function layarSelesai() {
+    return `
+      <h1 data-fokus tabindex="-1">Jawaban terkirim</h1>
+      <p>Terima kasih sudah meluangkan waktu. Jawaban Anda tersimpan tanpa identitas.</p>
+      <p class="bantuan">Halaman ini boleh ditutup.</p>
+      <div class="aksi"><button type="button" class="tombol kedua" data-aksi="ke-awal">Kembali ke halaman awal</button></div>`;
+  }
+
+  /* ---------- validasi ---------- */
+  function periksaLangkah() {
+    const nama = langkah[draf.posisi];
+    const belum = [];
+    if (nama === 'profil') {
+      if (cfg.unitKerja.length && cfg.unitKerja.indexOf(draf.unit) < 0) belum.push('grup-unit');
+      if (cfg.masaKerja.length && cfg.masaKerja.indexOf(draf.masaKerja) < 0) belum.push('grup-masaKerja');
+    } else if (nama && nama.indexOf('hal-') === 0) {
+      halaman[Number(nama.slice(4))].forEach((b) => { if (!draf.jawaban[b.kode]) belum.push('b-' + b.kode); });
+    }
+    app.querySelectorAll('.belum').forEach((el) => el.classList.remove('belum'));
+    const galat = document.getElementById('galat-langkah');
+    if (!belum.length) {
+      if (galat) galat.textContent = '';
+      return true;
+    }
+    belum.forEach((id) => { const el = document.getElementById(id); if (el) el.classList.add('belum'); });
+    if (galat) {
+      galat.textContent = nama === 'profil'
+        ? 'Lengkapi pilihan yang ditandai.'
+        : 'Masih ada ' + belum.length + ' pernyataan yang belum dijawab.';
+    }
+    const pertama = document.getElementById(belum[0]);
+    if (pertama) {
+      pertama.scrollIntoView({ behavior: gerakBoleh() ? 'smooth' : 'auto', block: 'center' });
+      pertama.focus({ preventScroll: true });
+    }
+    return false;
+  }
+
+  function keButir(kodeButir) {
+    const idx = cfg.butir.findIndex((b) => b.kode === kodeButir);
+    const pos = langkah.indexOf('hal-' + Math.floor(Math.max(idx, 0) / PER_HALAMAN));
+    draf.posisi = pos >= 0 ? pos : 0;
+    simpanDraf();
+    tampil('isi');
+    periksaLangkah();
+  }
+
+  /* ---------- alur ---------- */
+  async function mulaiSurvei(tombol) {
+    let kode = '';
+    if (cfg.wajibKode) {
+      const input = document.getElementById('kode');
+      const galat = document.getElementById('galat-kode');
+      kode = normalKode(input.value);
+      if (!kode) {
+        galat.textContent = 'Masukkan kode akses dari slip Anda.';
+        input.focus();
+        return;
+      }
+      tombol.disabled = true;
+      tombol.textContent = 'Memeriksa kode…';
+      let r = null;
+      try { r = await panggil({ action: 'cekKode', kode: kode }, 20000); } catch (err) { r = null; }
+      if (!r || !r.ok) {
+        if (r && r.jenis === 'tutup') { tampil('tutup'); return; }
+        galat.textContent = r
+          ? (r.pesan || 'Kode tidak bisa dipakai.')
+          : 'Kode belum bisa diperiksa karena koneksi terputus. Periksa sinyal, lalu coba lagi.';
+        tombol.disabled = false;
+        tombol.textContent = 'Mulai isi survei';
+        input.focus();
+        return;
+      }
+    }
+    draf = drafBaru(kode);
+    simpanDraf();
+    tampil('isi');
+  }
+
+  async function kirim() {
+    if (layar === 'isi' && !periksaLangkah()) return;
+    if (layar === 'gagal' && jenisGalat === 'kode') {
+      const input = document.getElementById('kode');
+      const k = normalKode(input ? input.value : '');
+      if (!k) { if (input) input.focus(); return; }
+      draf.kode = k;
+    }
+    const kosong = cfg.butir.filter((b) => !draf.jawaban[b.kode]);
+    if (kosong.length) { keButir(kosong[0].kode); return; }
+    simpanDraf();
+    tampil('kirim');
+
+    const data = {
+      action: 'kirim',
+      kode: draf.kode,
+      idKirim: draf.idKirim,
+      unit: draf.unit,
+      masaKerja: draf.masaKerja,
+      jawaban: draf.jawaban,
+      terbuka: draf.terbuka,
+      durasi: Math.round((Date.now() - draf.mulai) / 1000)
+    };
+
+    // Coba sampai 3 kali. ID kiriman yang sama membuat pengiriman ulang tidak tercatat dua kali.
+    let hasil = null;
+    for (let coba = 1; coba <= 3; coba++) {
+      if (coba > 1) {
+        const s = document.getElementById('status-kirim');
+        if (s) s.textContent = 'Koneksi lambat. Mencoba lagi (' + coba + ' dari 3)…';
+        await tunggu(1500 * coba + Math.random() * 1000);
+      }
+      try { hasil = await panggil(data, 45000); } catch (err) { hasil = null; }
+      if (hasil && (hasil.ok || hasil.jenis !== 'sibuk')) break;
+    }
+
+    if (hasil && hasil.ok) {
+      hapusDraf();
+      draf = null;
+      tampil('selesai');
+      return;
+    }
+    if (hasil && hasil.jenis === 'tutup') { tampil('tutup'); return; }
+    if (hasil && hasil.jenis === 'validasi' && hasil.kodeButir) { keButir(hasil.kodeButir); return; }
+
+    jenisGalat = hasil ? (hasil.jenis || 'server') : 'jaringan';
+    if (!hasil) pesan = 'Koneksi internet terputus atau terlalu lambat. Cari tempat dengan sinyal lebih baik, lalu coba lagi.';
+    else if (hasil.jenis === 'sibuk') pesan = 'Server sedang sibuk karena banyak yang mengirim bersamaan. Tunggu sebentar, lalu coba lagi.';
+    else if (hasil.jenis === 'kode') pesan = (hasil.pesan || 'Kode tidak bisa dipakai.') + ' Kalau Anda belum pernah mengirim jawaban, masukkan kode dari slip lain atau hubungi panitia survei.';
+    else if (hasil.jenis === 'validasi') pesan = (hasil.pesan || 'Ada isian yang perlu diperbaiki.') + ' Pilihan survei baru saja diperbarui. Muat ulang halaman, lalu periksa bagian Tentang Anda.';
+    else pesan = hasil.pesan || 'Server menolak jawaban.';
+    tampil('gagal');
+  }
+
+  async function mulaiAplikasi() {
+    tampil('muat');
+    rincian = '';
+    if (API_URL.indexOf('https://script.google.com/') !== 0 || API_URL.indexOf('GANTI_') >= 0) {
+      pesan = 'Alamat server survei belum diatur.';
+      rincian = 'isi API_URL di index.html dengan URL web app Apps Script yang berakhiran /exec.';
+      tampil('galat-muat');
+      return;
+    }
+    let c = null;
+    try {
+      c = await panggil(null, 25000);
+    } catch (err) {
+      pesan = 'Periksa sinyal internet Anda, lalu muat ulang halaman ini.';
+      rincian = String(err && err.message ? err.message : err);
+      tampil('galat-muat');
+      return;
+    }
+    if (!c || !c.ok || !Array.isArray(c.butir) || !c.butir.length) {
+      pesan = 'Pengaturan survei belum lengkap.';
+      rincian = (c && c.pesan) || 'daftar pernyataan kosong.';
+      tampil('galat-muat');
+      return;
+    }
+
+    cfg = c;
+    cfg.unitKerja = cfg.unitKerja || [];
+    cfg.masaKerja = cfg.masaKerja || [];
+    cfg.terbuka = cfg.terbuka || [];
+    cfg.skala = (cfg.skala && cfg.skala.length === 5) ? cfg.skala : SKALA_BAWAAN;
+    halaman = potong(cfg.butir, PER_HALAMAN);
+    nomor = {};
+    cfg.butir.forEach((b, i) => { nomor[b.kode] = i + 1; });
+    langkah = [];
+    if (cfg.unitKerja.length || cfg.masaKerja.length) langkah.push('profil');
+    halaman.forEach((_, i) => langkah.push('hal-' + i));
+    if (cfg.terbuka.length) langkah.push('terbuka');
+    document.title = cfg.judul;
+
+    if (!cfg.buka) { hapusDraf(); tampil('tutup'); return; }
+
+    const d = bacaDraf();
+    if (d && d.idKirim && typeof d.mulai === 'number' && Date.now() - d.mulai < UMUR_DRAF_MS) {
+      draf = d;
+      draf.jawaban = draf.jawaban || {};
+      draf.terbuka = draf.terbuka || {};
+      if (typeof draf.posisi !== 'number' || draf.posisi < 0 || draf.posisi >= langkah.length) draf.posisi = 0;
+      tampil('lanjut');
+      return;
+    }
+    if (d) hapusDraf();
+    tampil('intro');
+  }
+
+  /* ---------- peristiwa ---------- */
+  app.addEventListener('click', (e) => {
+    const t = e.target.closest ? e.target.closest('[data-aksi]') : null;
+    if (!t || t.disabled) return;
+    const aksi = t.getAttribute('data-aksi');
+    if (aksi === 'muat-ulang') mulaiAplikasi();
+    else if (aksi === 'mulai') mulaiSurvei(t);
+    else if (aksi === 'lanjutkan') tampil('isi');
+    else if (aksi === 'buang-draf') { hapusDraf(); draf = null; tampil('intro'); }
+    else if (aksi === 'lanjut') { if (periksaLangkah()) { draf.posisi += 1; simpanDraf(); tampil('isi'); } }
+    else if (aksi === 'kembali') { draf.posisi = Math.max(0, draf.posisi - 1); simpanDraf(); tampil('isi'); }
+    else if (aksi === 'kirim') kirim();
+    else if (aksi === 'periksa') { draf.posisi = langkah.length - 1; tampil('isi'); }
+    else if (aksi === 'ke-awal') { draf = null; tampil('intro'); }
+  });
+
+  app.addEventListener('change', (e) => {
+    const t = e.target;
+    if (!draf || t.type !== 'radio') return;
+    if (t.name === 'unit') draf.unit = t.value;
+    else if (t.name === 'masaKerja') draf.masaKerja = t.value;
+    else draf.jawaban[t.name] = Number(t.value);
+    const wadah = t.closest('fieldset');
+    if (wadah && wadah.classList.contains('belum')) {
+      wadah.classList.remove('belum');
+      const sisa = app.querySelectorAll('fieldset.belum').length;
+      const galat = document.getElementById('galat-langkah');
+      if (galat) {
+        galat.textContent = !sisa ? ''
+          : langkah[draf.posisi] === 'profil' ? 'Lengkapi pilihan yang ditandai.'
+          : 'Masih ada ' + sisa + ' pernyataan yang belum dijawab.';
+      }
+    }
+    simpanDraf();
+  });
+
+  app.addEventListener('input', (e) => {
+    const t = e.target;
+    if (t.id === 'kode') {
+      const g = document.getElementById('galat-kode');
+      if (g) g.textContent = '';
+    } else if (draf && t.hasAttribute('data-terbuka')) {
+      draf.terbuka[t.getAttribute('data-terbuka')] = t.value.slice(0, BATAS_TEKS);
+      const h = app.querySelector('[data-hitung-untuk="' + t.id + '"]');
+      if (h) h.textContent = t.value.length + '/' + BATAS_TEKS;
+      simpanDraf();
+    }
+  });
+
+  app.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' || !e.target || e.target.id !== 'kode') return;
+    e.preventDefault();
+    const b = app.querySelector('[data-aksi="mulai"]') || app.querySelector('[data-aksi="kirim"]');
+    if (b) b.click();
+  });
+
+  mulaiAplikasi();
+})();
+</script>
+</body>
+</html>
